@@ -1,0 +1,8 @@
+# Prisma Migrate lockfile v1
+
+20200820095530-user-created
+20200820100248-change-table-name
+20200820101052-added-book-model
+20200820192733-added-review
+20200820193934-change-table-name-for-review
+20200824100540-change-table-name
