@@ -14,8 +14,9 @@ router.post(
       where: { id: +bookId },
     });
     if (!book) return res.status(404).json({ error: "Not found" });
-    if (book.authorId === +id)
+    if (book.authorId === +id) {
       return res.status(403).json({ error: "Not allowed to review own book" });
+    }
     const review = await prisma.review.create({
       data: {
         user: {
@@ -41,8 +42,9 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
     include: { author: true },
   });
   if (!book) return res.status(404).json({ error: "Not found" });
-  if (book.authorId !== +req.user.id)
+  if (book.authorId !== +req.user.id) {
     return res.status(403).json({ error: "Not allowed" });
+  }
 
   await prisma.book.update({
     where: {

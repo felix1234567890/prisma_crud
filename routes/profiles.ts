@@ -62,8 +62,9 @@ router.delete("/:id", isAuthenticated, async (req: Request, res: Response) => {
       },
     });
     if (!profile) return res.status(404).json({ error: "Not found" });
-    if (profile.userId !== +req.user.id)
+    if (profile.userId !== +req.user.id) {
       return res.status(403).json({ error: "Not allowed" });
+    }
     res.status(200).send(profile);
   } catch (error) {
     console.log(error);

@@ -6,3 +6,6 @@
 20200820192733-added-review
 20200820193934-change-table-name-for-review
 20200824100540-change-table-name
+20200911082327-added-two-fields-to-user
+20200911082619-added-property-type
+20200911092538-added-unique-constraint

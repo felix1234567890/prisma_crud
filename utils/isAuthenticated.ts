@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config();
+import "dotenv/config";
 
 const isAuthenticated = (
   request: Request,
@@ -19,6 +17,7 @@ const isAuthenticated = (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     const { id } = decoded as { id: string };
+
     request.user = { id };
     return next();
   } catch (error) {
