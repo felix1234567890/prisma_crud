@@ -8,6 +8,7 @@ export default class UserResponseDTO {
   married: string | null;
   @Exclude()
   password: string;
+
   role: 'USER' | 'ADMIN';
   createdAt: Date;
   books: Array<Book>;

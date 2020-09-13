@@ -23,6 +23,7 @@ class MailService implements IMailService {
       },
     });
   }
+
   async sendMail(data: MailData) {
     try {
       await this.transporter.sendMail(data);

@@ -20,6 +20,7 @@ export default class UserService {
     @inject('UserRepository') private readonly userRepository: IUserRepository,
     @inject('MailService') private readonly mailService: IMailService,
   ) {}
+
   public async createUser(userDto: CreateUserDTO): Promise<UserResponseDTO> {
     await validateClassParameters(userDto);
     const user = await this.userRepository.getUserByEmail(userDto.email);
@@ -34,29 +35,34 @@ export default class UserService {
     const res = plainToClass(UserResponseDTO, createdUser);
     return res;
   }
+
   public async deleteUser(userDto: FindDeleteUserDTO) {
     await validateClassParameters(userDto);
     const user = await this.userRepository.deleteUser(userDto.id);
     const res = plainToClass(UserResponseDTO, user);
     return res;
   }
+
   public async updateUser(userDto: UpdateUserDTO) {
     await validateClassParameters(userDto);
     const user = await this.userRepository.updateUser(userDto);
     const res = plainToClass(UserResponseDTO, user);
     return res;
   }
+
   public async paginateUsers(userDto: ListUsersDTO) {
     await validateClassParameters(userDto);
     const users = await this.userRepository.getPaginatedUsers(userDto);
     const res = plainToClass(UserResponseDTO, users);
     return res;
   }
+
   public async findUser({ id }: FindDeleteUserDTO) {
     const user = await this.userRepository.findUserById(id);
     const res = plainToClass(UserResponseDTO, user);
     return res;
   }
+
   public async forgotPassword(forgotPasswordDto: ForgotPasswordDTO) {
     await validateClassParameters(forgotPasswordDto);
     const user = await this.userRepository.findUserByEmail(
@@ -80,6 +86,7 @@ export default class UserService {
       });
     }
   }
+
   public async resetPassword(resetPasswordDTO: ResetPasswordDTO) {
     await validateClassParameters(resetPasswordDTO);
     const resetPasswordToken = crypto
@@ -103,6 +110,7 @@ export default class UserService {
       throw new AppError('No user found');
     }
   }
+
   private generateResetPasswordToken(): Array<string> {
     const resetToken = crypto.randomBytes(20).toString('hex');
     const hashToken = crypto

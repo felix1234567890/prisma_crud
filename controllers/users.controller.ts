@@ -37,6 +37,7 @@ class UserController {
     const user = await this.userService.updateUser(userDto);
     res.status(200).send(user);
   };
+
   public findUser = async (req: Request, res: Response) => {
     const userDto = plainToClass(FindDeleteUserDTO, req.params);
     const user = await this.userService.findUser(userDto);
@@ -48,6 +49,7 @@ class UserController {
     const user = await this.userService.paginateUsers(userDto);
     res.status(200).send(user);
   };
+
   public forgotPassword = async (
     req: Request,
     res: Response,
@@ -65,6 +67,7 @@ class UserController {
       next(error);
     }
   };
+
   public resetPassword = async (
     req: Request,
     res: Response,

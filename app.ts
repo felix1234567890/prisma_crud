@@ -1,9 +1,5 @@
 import 'reflect-metadata';
 import express, { Application } from 'express';
-// import userRoutes from "./routes/users";
-import bookRoutes from './routes/books';
-import reviewRoutes from './routes/reviews';
-import profileRoutes from './routes/profiles';
 import fileupload from 'express-fileupload';
 import path from 'path';
 import errorHandler from './utils/errorHandler';
@@ -13,7 +9,13 @@ import AppError from './utils/AppError';
 import './utils/container';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { userRoutes } from './routes';
+import {
+  userRoutes,
+  authRoutes,
+  bookRoutes,
+  profileRoutes,
+  reviewRoutes,
+} from './routes';
 
 class App {
   private app: Application;
@@ -23,9 +25,11 @@ class App {
     this.setupRoutes();
     this.setupPostRouteMiddleware();
   }
+
   public getServer() {
     return this.app;
   }
+
   private setupMiddleware() {
     this.app.use(
       rateLimit({
@@ -37,12 +41,15 @@ class App {
     this.app.use(express.static(path.join(__dirname, 'public')));
     this.app.use(fileupload());
   }
+
   private setupRoutes() {
     this.app.use('/users', userRoutes);
     this.app.use('/profiles', profileRoutes);
     this.app.use('/books', bookRoutes);
     this.app.use('/reviews', reviewRoutes);
+    this.app.use('/auth', authRoutes);
   }
+
   setupPostRouteMiddleware() {
     const options = {
       definition: {
@@ -67,7 +74,7 @@ class App {
           },
         ],
       },
-      apis: ['./routes/users.ts'],
+      apis: [path.resolve(__dirname, './docs/**/*.yml')],
     };
 
     const specs = swaggerJsdoc(options);

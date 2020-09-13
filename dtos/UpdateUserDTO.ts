@@ -13,6 +13,7 @@ export default class UpdateUserDTO {
   @IsInt()
   @Transform((value) => parseInt(value, 10), { toClassOnly: true })
   id: number;
+
   @IsOptional()
   @IsString()
   public username?: string;

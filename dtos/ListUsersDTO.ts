@@ -1,5 +1,5 @@
-import { IsInt, IsDefined, IsOptional } from "class-validator";
-import { Transform } from "class-transformer";
+import { IsInt, IsDefined, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export default class ListUsersDTO {
   @IsOptional()

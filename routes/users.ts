@@ -1,6 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { prisma } from '../index';
-import { validationRules, validate } from '../validators/createUserValidator';
 import bcrypt from 'bcrypt';
 import asyncHandler from '../utils/asyncHandler';
 import UserController from '../controllers/users.controller';
@@ -113,38 +112,47 @@ const router = Router();
  *                  schema:
  *                     $ref: '#/components/schemas/User'
  * */
-router.get('/', asyncHandler(userController.paginateUsers));
+router
+  .route('/')
+  .get(asyncHandler(userController.paginateUsers))
+  .post(userController.createUser);
+router
+  .route('/:id')
+  .get(userController.findUser)
+  .put(userController.updateUser)
+  .delete(userController.deleteUser);
+// router.get('/', asyncHandler(userController.paginateUsers));
 router.post('/forgotPassword', userController.forgotPassword);
 router.post('/resetPassword/:token', userController.resetPassword);
-router.get('/:id', userController.findUser);
-router.post('/new', userController.createUser);
-//router.post("/password/forgot", userController.resetPassword);
-router.delete('/:id', userController.deleteUser);
-router.put('/:id', userController.updateUser);
-router.post(
-  '/',
-  validationRules(),
-  validate,
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { username, email, married } = req.body;
-    let password = req.body;
-    try {
-      const salt = await bcrypt.genSalt(12);
-      password = await bcrypt.hash(password, salt);
-      const user = await prisma.user.create({
-        data: {
-          email,
-          username,
-          password,
-          married,
-        },
-      });
-      res.status(201).send(user);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
-);
+// router.get('/:id', userController.findUser);
+// // router.post('/', userController.createUser);
+// //router.post("/password/forgot", userController.resetPassword);
+// router.delete('/:id', userController.deleteUser);
+// router.put('/:id', userController.updateUser);
+// router.post(
+//   '/',
+//   validationRules(),
+//   validate,
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { username, email, married } = req.body;
+//     let password = req.body;
+//     try {
+//       const salt = await bcrypt.genSalt(12);
+//       password = await bcrypt.hash(password, salt);
+//       const user = await prisma.user.create({
+//         data: {
+//           email,
+//           username,
+//           password,
+//           married,
+//         },
+//       });
+//       res.status(201).send(user);
+//     } catch (error) {
+//       res.status(500).json({ error: error.message });
+//     }
+//   },
+// );
 
 router.post(
   '/login',
@@ -158,7 +166,7 @@ router.post(
     if (!user) return res.status(404).send({ message: 'Not found' });
     if (!process.env.JWT_SECRET) throw new Error('Env variable not loaded');
     const isMatch = bcrypt.compareSync(password, user?.password);
-    console.log(isMatch);
+
     if (isMatch) {
       const token = jwtService.authenticateUser(user);
       res.status(200).json({ token });
