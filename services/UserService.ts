@@ -1,16 +1,18 @@
 import { inject, injectable } from 'tsyringe';
-import CreateUserDTO from '../dtos/CreateUserDTO';
+import CreateUserDTO from '../dtos/auth/CreateUserDTO';
 import validateClassParameters from '../utils/validateClassParameters';
 import AppError from '../utils/AppError';
 import bcrypt from 'bcrypt';
 import { plainToClass } from 'class-transformer';
-import UserResponseDTO from '../dtos/UserResponseDTO';
-import { FindDeleteUserDTO } from '../dtos';
-import IUserRepository from '../repository/user.irepository';
-import UpdateUserDTO from '../dtos/UpdateUserDTO';
-import ListUsersDTO from '../dtos/ListUsersDTO';
 import { IBookRepository } from 'repository/book.repository';
 import { IReviewRepository } from 'repository/review.repository';
+import IUserRepository from 'repository/user.irepository';
+import {
+  UserResponseDTO,
+  FindDeleteUserDTO,
+  UpdateUserDTO,
+  ListUsersDTO,
+} from 'dtos/user';
 
 @injectable()
 export default class UserService {

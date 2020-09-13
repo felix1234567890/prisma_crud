@@ -7,7 +7,7 @@ import {
   LoginUserDTO,
   ResetPasswordDTO,
   ForgotPasswordDTO,
-} from 'dtos';
+} from 'dtos/auth';
 
 @injectable()
 class AuthController {

@@ -1,4 +1,5 @@
 import { compare, hashSync } from 'bcrypt';
+
 export interface IHashService {
   generateHash(payload: string): string;
   compareHash(payload: string, hashed: string): Promise<boolean>;

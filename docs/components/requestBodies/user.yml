@@ -1,0 +1,14 @@
+components:
+  requestBodies:
+    UserCreateForm:
+      type: object
+      properties:
+        username:
+          type: string
+          example: frane10
+        email:
+          type: string
+          example: frane@example.com
+        password:
+          type: string
+          example: 'pass123456'

@@ -21,9 +21,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/User'
-                  message:
-                    type: string
-                    example: Ok!
     post:
       tags:
         - User
@@ -38,15 +35,12 @@ paths:
               $ref: '#/components/requestBodies/UserCreateForm'
       responses:
         201:
-          description: Usuario creado con Exito
+          description: User successfully created
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  statusCode:
-                    type: integer
-                    example: 200
                   data:
                     type: string
                     example: token

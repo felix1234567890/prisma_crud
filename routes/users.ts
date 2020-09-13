@@ -10,9 +10,9 @@ const router = Router();
 router.route('/').get(asyncHandler(userController.paginateUsers));
 router
   .route('/:id')
-  .get(userController.findUser)
-  .put(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(asyncHandler(userController.findUser))
+  .put(asyncHandler(userController.updateUser))
+  .delete(asyncHandler(userController.deleteUser));
 
 router.get('/:id/books', asyncHandler(userController.getUserBooks));
 

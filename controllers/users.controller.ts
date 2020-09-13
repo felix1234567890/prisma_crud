@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import { injectable } from 'tsyringe';
 import { plainToClass } from 'class-transformer';
-import { FindDeleteUserDTO } from '../dtos';
+import { FindDeleteUserDTO, UpdateUserDTO, ListUsersDTO } from '../dtos/user';
 import UserService from '../services/UserService';
-import UpdateUserDTO from '../dtos/UpdateUserDTO';
-import ListUsersDTO from '../dtos/ListUsersDTO';
 
 @injectable()
 class UserController {

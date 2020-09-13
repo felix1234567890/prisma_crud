@@ -12,6 +12,7 @@ interface IAuthSettings {
 export interface IJWTService {
   authenticateUser(user: User): string;
 }
+
 @injectable()
 class JWTAuthService implements IJWTService {
   constructor(private readonly authSettings: IAuthSettings) {}

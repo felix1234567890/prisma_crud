@@ -1,10 +1,9 @@
 import { prisma } from '../index';
 import IUserRepository from './user.irepository';
-import CreateUserDTO from 'dtos/CreateUserDTO';
 import { User } from '@prisma/client';
 import { injectable } from 'tsyringe';
-import UpdateUserDTO from 'dtos/UpdateUserDTO';
-import ListUsersDTO from 'dtos/ListUsersDTO';
+import { ListUsersDTO, UpdateUserDTO } from 'dtos/user';
+import { CreateUserDTO } from 'dtos/auth';
 
 @injectable()
 class UserRepository implements IUserRepository {
