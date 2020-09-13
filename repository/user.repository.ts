@@ -1,11 +1,9 @@
 import { prisma } from '../index';
 import IUserRepository from './user.irepository';
 import CreateUserDTO from 'dtos/CreateUserDTO';
-import { classToClass, plainToClass } from 'class-transformer';
-import UserReponse from 'dtos/UserResponse';
 import { User } from '@prisma/client';
-import UserResponseDTO from 'dtos/UserResponseDTO';
-import { injectable, inject, container } from 'tsyringe';
+
+import { injectable } from 'tsyringe';
 import UpdateUserDTO from 'dtos/UpdateUserDTO';
 import ListUsersDTO from 'dtos/ListUsersDTO';
 

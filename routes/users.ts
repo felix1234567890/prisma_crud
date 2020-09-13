@@ -6,7 +6,7 @@ import UserController from '../controllers/users.controller';
 import { container } from 'tsyringe';
 import UserRepository from '../repository/user.repository';
 import IUserRepository from '../repository/user.irepository';
-import { IAuthService } from 'utils/JwtAuthService';
+import { IJWTService } from 'utils/JwtAuthService';
 import AppError from 'utils/AppError';
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
@@ -36,7 +36,7 @@ container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
  */
 
 const userController = container.resolve(UserController);
-const jwtService = container.resolve<IAuthService>('AuthService');
+const jwtService = container.resolve<IJWTService>('JWTService');
 const router = Router();
 
 // router.get(

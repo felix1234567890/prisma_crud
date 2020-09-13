@@ -1,16 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { injectable, inject } from 'tsyringe';
-import IUserRepository from 'repository/user.irepository';
+import { injectable } from 'tsyringe';
 import CreateUserDTO from '../dtos/CreateUserDTO';
 import { plainToClass } from 'class-transformer';
-import validateClassParameters from 'utils/validateClassParameters';
-import AppError from 'utils/AppError';
-import bcrypt from 'bcrypt';
-import CreateUserService from 'services/CreateUserService';
 import ResetPasswordDTO from 'dtos/ResetPasswordDTO';
-import ResetPasswordUserService from 'services/ResetPasswordUserService';
 import { FindDeleteUserDTO } from '../dtos';
-import DeleteUserService from 'services/DeleteUserService';
 import UserService from '../services/UserService';
 import UpdateUserDTO from '../dtos/UpdateUserDTO';
 import ListUsersDTO from '../dtos/ListUsersDTO';

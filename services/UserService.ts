@@ -3,7 +3,7 @@ import CreateUserDTO from '../dtos/CreateUserDTO';
 import validateClassParameters from '../utils/validateClassParameters';
 import AppError from '../utils/AppError';
 import bcrypt from 'bcrypt';
-import { plainToClass, classToClass } from 'class-transformer';
+import { plainToClass } from 'class-transformer';
 import UserResponseDTO from '../dtos/UserResponseDTO';
 import { FindDeleteUserDTO } from '../dtos';
 import IUserRepository from '../repository/user.irepository';
