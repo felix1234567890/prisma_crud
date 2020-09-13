@@ -9,7 +9,7 @@ export default function roleMiddleware(roles) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = parseInt(req.user.id);
     const userRepository = container.resolve<IUserRepository>('UserRepository');
-    const user = await userRepository.findUserById(id);
+    const user = await userRepository.findById(id);
     if (user) {
       if (roles.length && !roles.includes(user.role)) {
         return res.status(401).json({ message: 'Unauthorized' });

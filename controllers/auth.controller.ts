@@ -12,6 +12,7 @@ import {
 @injectable()
 class AuthController {
   constructor(private readonly authService: AuthService) {}
+
   public registerUser = async (req: Request, res: Response) => {
     const userDto = plainToClass(CreateUserDTO, req.body);
     const user = await this.authService.registerUser(userDto);

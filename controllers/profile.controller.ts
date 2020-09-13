@@ -9,6 +9,7 @@ import { plainToClass } from 'class-transformer';
 @injectable()
 class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
+
   public createProfile = async (req: Request, res: Response) => {
     const { id } = req.user;
     if (!req.files || Object.keys(req.files).length === 0) {

@@ -1,23 +1,34 @@
 import { Request, Response } from 'express';
 import { injectable } from 'tsyringe';
 import { plainToClass } from 'class-transformer';
-import { FindDeleteUserDTO, UpdateUserDTO, ListUsersDTO } from '../dtos/user';
+import {
+  FindDeleteUserDTO,
+  UpdateUserDTO,
+  ListUsersDTO,
+  UserResponseDTO,
+} from '../dtos/user';
 import UserService from '../services/UserService';
 
 @injectable()
 class UserController {
   constructor(private readonly userService: UserService) {}
 
-  public deleteUser = async (req: Request, res: Response) => {
+  public deleteUser = async (
+    req: Request,
+    res: Response,
+  ): Promise<Response<UserResponseDTO[]>> => {
     const userDto = plainToClass(FindDeleteUserDTO, req.params);
     const user = await this.userService.deleteUser(userDto);
-    res.status(200).send(user);
+    return res.status(200).send(user);
   };
 
-  public updateUser = async (req: Request, res: Response) => {
+  public updateUser = async (
+    req: Request,
+    res: Response,
+  ): Promise<Response<UserResponseDTO>> => {
     const userDto = plainToClass(UpdateUserDTO, { ...req.params, ...req.body });
     const user = await this.userService.updateUser(userDto);
-    res.status(200).send(user);
+    return res.status(200).send(user);
   };
 
   public findUser = async (req: Request, res: Response) => {

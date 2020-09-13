@@ -37,7 +37,7 @@ class AuthService implements IAuthService {
       throw new AppError('User exists with this same e-mail', false, 400);
     }
     const password = this.hashService.generateHash(userDto.password);
-    const createdUser = await this.userRepository.createUser({
+    const createdUser = await this.userRepository.create({
       ...userDto,
       password,
     });
@@ -77,7 +77,7 @@ class AuthService implements IAuthService {
       user.resetPasswordToken = hashToken;
       user.resetPasswordExpire = expirationTime;
       const userDto = plainToClass(UpdateUserDTO, user);
-      const userData = await this.userRepository.updateUser(userDto);
+      const userData = await this.userRepository.update(userDto);
       const host = process.env.HOST || `http://localhost:3000`;
       await this.mailService.sendMail({
         to: userData.email,
@@ -106,7 +106,7 @@ class AuthService implements IAuthService {
       user.resetPasswordToken = null;
       user.resetPasswordExpire = null;
       const userDto = plainToClass(UpdateUserDTO, user);
-      await this.userRepository.updateUser(userDto);
+      await this.userRepository.update(userDto);
     } else {
       throw new AppError('No user found');
     }

@@ -14,7 +14,7 @@ class UserRepository implements IUserRepository {
     return user;
   }
 
-  async findUserById(id: number): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     const user = await prisma.user.findOne({
       where: { id },
     });
@@ -40,12 +40,8 @@ class UserRepository implements IUserRepository {
     return users;
   }
 
-  async getUsers() {
-    const users = await prisma.user.findMany({
-      include: {
-        books: true,
-      },
-    });
+  async getAll() {
+    const users = await prisma.user.findMany({});
     return users;
   }
 
@@ -58,7 +54,7 @@ class UserRepository implements IUserRepository {
     return user;
   }
 
-  async createUser(userDto: CreateUserDTO) {
+  async create(userDto: CreateUserDTO) {
     const user = await prisma.user.create({
       data: {
         ...userDto,
@@ -67,12 +63,12 @@ class UserRepository implements IUserRepository {
     return user;
   }
 
-  async deleteUser(id: number) {
+  async delete(id: number) {
     const user = await prisma.user.delete({ where: { id } });
     return user;
   }
 
-  async updateUser({ id, ...rest }: UpdateUserDTO) {
+  async update({ id, ...rest }: UpdateUserDTO) {
     const user = await prisma.user.update({
       where: { id },
       data: {

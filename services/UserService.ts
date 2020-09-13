@@ -30,7 +30,7 @@ export default class UserService {
       throw new AppError('User exists with this same e-mail', false, 400);
     }
     const password = bcrypt.hashSync(userDto.password, 10);
-    const createdUser = await this.userRepository.createUser({
+    const createdUser = await this.userRepository.create({
       ...userDto,
       password,
     });
@@ -40,14 +40,14 @@ export default class UserService {
 
   public async deleteUser(userDto: FindDeleteUserDTO) {
     await validateClassParameters(userDto);
-    const user = await this.userRepository.deleteUser(userDto.id);
+    const user = await this.userRepository.delete(userDto.id);
     const res = plainToClass(UserResponseDTO, user);
     return res;
   }
 
   public async updateUser(userDto: UpdateUserDTO) {
     await validateClassParameters(userDto);
-    const user = await this.userRepository.updateUser(userDto);
+    const user = await this.userRepository.update(userDto);
     const res = plainToClass(UserResponseDTO, user);
     return res;
   }
@@ -60,7 +60,7 @@ export default class UserService {
   }
 
   public async findUser({ id }: FindDeleteUserDTO) {
-    const user = await this.userRepository.findUserById(id);
+    const user = await this.userRepository.findById(id);
     const res = plainToClass(UserResponseDTO, user);
     return res;
   }

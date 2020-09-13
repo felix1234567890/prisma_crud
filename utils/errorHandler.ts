@@ -1,13 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import AppError from './AppError';
 import { errors } from 'celebrate';
 
-const errorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const errorHandler = (err: Error, _: Request, res: Response) => {
   errors();
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
@@ -18,7 +13,7 @@ const errorHandler = (
       error_details: err?.errorDetails,
     });
   }
-  console.log(err);
+
   return res.status(500).json({
     success: false,
     message: 'Ops! We have an error :(',

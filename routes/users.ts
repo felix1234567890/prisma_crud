@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import asyncHandler from '../utils/asyncHandler';
-import UserController from '../controllers/users.controller';
+import UserController from '../controllers/user.controller';
 import { container } from 'tsyringe';
 
 const userController = container.resolve(UserController);

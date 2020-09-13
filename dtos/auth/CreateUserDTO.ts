@@ -7,12 +7,6 @@ import {
   MinLength,
 } from 'class-validator';
 
-export enum Role {
-  // eslint-disable-next-line no-unused-vars
-  USER,
-  // eslint-disable-next-line no-unused-vars
-  ADMIN,
-}
 export default class CreateUserDTO {
   @IsDefined()
   @IsString()
