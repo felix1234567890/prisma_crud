@@ -3,7 +3,6 @@ import express, { Application } from 'express';
 import fileupload from 'express-fileupload';
 import path from 'path';
 import errorHandler from './utils/errorHandler';
-import { errors } from 'celebrate';
 import rateLimit from 'express-rate-limit';
 import AppError from './utils/AppError';
 import './utils/container';
@@ -16,6 +15,7 @@ import {
   profileRoutes,
   reviewRoutes,
 } from './routes';
+import options from './utils/swagger';
 
 class App {
   private app: Application;
@@ -51,32 +51,6 @@ class App {
   }
 
   setupPostRouteMiddleware() {
-    const options = {
-      definition: {
-        openapi: '3.0.0',
-        info: {
-          title: 'User books with reviews API docs',
-          version: '1.0.0',
-          description:
-            'This is a CRUD API application made with Express and documented with Swagger',
-          license: {
-            name: 'MIT',
-            url: 'https://spdx.org/licenses/MIT.html',
-          },
-          contact: {
-            name: 'Frane Lukin',
-            email: 'blueskyandsea01@email.com',
-          },
-        },
-        servers: [
-          {
-            url: 'http://localhost:3000/books',
-          },
-        ],
-      },
-      apis: [path.resolve(__dirname, './docs/**/*.yml')],
-    };
-
     const specs = swaggerJsdoc(options);
     this.app.use(
       '/api-docs',

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import AppError from './AppError';
+import { errors } from 'celebrate';
 
 const errorHandler = (
   err: Error,
@@ -7,6 +8,7 @@ const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
+  errors();
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       success: false,

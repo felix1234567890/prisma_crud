@@ -24,14 +24,10 @@ export default class UpdateUserDTO {
 
   @IsOptional()
   @IsIn(['USER', 'ADMIN'])
-  public role: Role;
+  public role: 'USER' | 'ADMIN';
 
   @IsOptional()
   @IsString()
   @MinLength(4)
   public password?: string;
-}
-enum Role {
-  user = 'USER',
-  admin = 'ADMIN',
 }

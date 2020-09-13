@@ -5,8 +5,18 @@ import authService, { IJWTService } from './JwtAuthService';
 
 import mailService, { IMailService } from './MailService';
 import BcryptService, { IHashService } from './BcryptService';
+import BookRepository, { IBookRepository } from 'repository/book.repository';
+import ReviewRepository, {
+  IReviewRepository,
+} from 'repository/review.repository';
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
+container.registerSingleton<IBookRepository>('BookRepository', BookRepository);
+container.registerSingleton<IReviewRepository>(
+  'ReviewRepository',
+  ReviewRepository,
+);
+container.registerSingleton<IHashService>('HashService', BcryptService);
+
 container.register<IJWTService>('JWTService', { useValue: authService });
 container.register<IMailService>('MailService', { useValue: mailService });
-container.registerSingleton<IHashService>('HashService', BcryptService);

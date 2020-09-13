@@ -9,16 +9,16 @@ import { FindDeleteUserDTO } from '../dtos';
 import IUserRepository from '../repository/user.irepository';
 import UpdateUserDTO from '../dtos/UpdateUserDTO';
 import ListUsersDTO from '../dtos/ListUsersDTO';
-import ForgotPasswordDTO from 'dtos/ForgotPasswordDTO';
-import crypto from 'crypto';
-import { IMailService } from 'utils/MailService';
-import ResetPasswordDTO from 'dtos/ResetPasswordDTO';
+import { IBookRepository } from 'repository/book.repository';
+import { IReviewRepository } from 'repository/review.repository';
 
 @injectable()
 export default class UserService {
   constructor(
     @inject('UserRepository') private readonly userRepository: IUserRepository,
-    @inject('MailService') private readonly mailService: IMailService,
+    @inject('BookRepository') private readonly bookRepository: IBookRepository,
+    @inject('ReviewRepository')
+    private readonly reviewRepository: IReviewRepository,
   ) {}
 
   public async createUser(userDto: CreateUserDTO): Promise<UserResponseDTO> {
@@ -63,60 +63,13 @@ export default class UserService {
     return res;
   }
 
-  public async forgotPassword(forgotPasswordDto: ForgotPasswordDTO) {
-    await validateClassParameters(forgotPasswordDto);
-    const user = await this.userRepository.findUserByEmail(
-      forgotPasswordDto.email,
-    );
-    const [resetToken, hashToken] = this.generateResetPasswordToken();
-    const expirationTime = new Date(Date.now() + 30 * 60 * 1000);
-    if (user) {
-      user.resetPasswordToken = hashToken;
-      user.resetPasswordExpire = expirationTime;
-      const userDto = plainToClass(UpdateUserDTO, user);
-      const userData = await this.userRepository.updateUser(userDto);
-      // const res = plainToClass(UserResponseDTO, userData);
-      // return res;
-      const host = process.env.HOST || `http://localhost:3000`;
-      await this.mailService.sendMail({
-        to: userData.email,
-        from: process.env.USERNAME as string,
-        subject: 'Password Recovery',
-        text: `Hello ${userData.username}, here is the link to reset your account password: ${host}/users/resetPassword/${resetToken}`,
-      });
-    }
+  public async findUserBooks({ id }: FindDeleteUserDTO) {
+    const books = await this.bookRepository.findUserBooks(id);
+    return books;
   }
 
-  public async resetPassword(resetPasswordDTO: ResetPasswordDTO) {
-    await validateClassParameters(resetPasswordDTO);
-    const resetPasswordToken = crypto
-      .createHash('sha256')
-      .update(resetPasswordDTO.token)
-      .digest('hex');
-    const user = await this.userRepository.findByResetPasswordToken(
-      resetPasswordToken,
-    );
-    if (user) {
-      if (user.resetPasswordExpire && user.resetPasswordExpire < new Date()) {
-        throw new AppError('Password reset token is invalid.', false, 400);
-      }
-
-      user.password = bcrypt.hashSync(resetPasswordDTO.password, 10);
-      user.resetPasswordToken = null;
-      user.resetPasswordExpire = null;
-      const userDto = plainToClass(UpdateUserDTO, user);
-      await this.userRepository.updateUser(userDto);
-    } else {
-      throw new AppError('No user found');
-    }
-  }
-
-  private generateResetPasswordToken(): Array<string> {
-    const resetToken = crypto.randomBytes(20).toString('hex');
-    const hashToken = crypto
-      .createHash('sha256')
-      .update(resetToken)
-      .digest('hex');
-    return [resetToken, hashToken];
+  public async findUserReviews({ id }: FindDeleteUserDTO) {
+    const reviews = await this.reviewRepository.findUserReviews(id);
+    return reviews;
   }
 }

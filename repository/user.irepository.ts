@@ -1,10 +1,7 @@
 import { User, Book } from '@prisma/client';
 import CreateUserDTO from 'dtos/CreateUserDTO';
-import UserReponse from 'dtos/UserResponse';
-import UserResponseDTO from 'dtos/UserResponseDTO';
 import UpdateUserDTO from 'dtos/UpdateUserDTO';
 import ListUsersDTO from 'dtos/ListUsersDTO';
-import AppError from 'utils/AppError';
 
 export default interface IUserRepository {
   getPaginatedUsers(
