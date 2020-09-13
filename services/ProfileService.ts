@@ -2,30 +2,24 @@ import { IProfileRepository } from 'repository/profile.repository';
 import { inject, injectable } from 'tsyringe';
 import { UploadedFile } from 'express-fileupload';
 import AppError from 'utils/AppError';
-import path from 'path';
 import { PrismaClientKnownRequestError } from '@prisma/client';
-import IUserRepository from 'repository/user.irepository';
 import { DeleteProfileDTO } from 'dtos/profile';
-import { unlink } from 'fs/promises';
+import { IIMageUploader } from 'utils/ImageUploader';
 
 @injectable()
 class ProfileService {
   constructor(
     @inject('ProfileRepository')
     private readonly profileRepository: IProfileRepository,
-    @inject('UserRepository') private readonly userRepository: IUserRepository,
+    @inject('ImageUploadService')
+    private readonly imageUploadService: IIMageUploader,
   ) {}
 
   public async createProfile(id: string, profileImage: UploadedFile) {
     if (!profileImage.mimetype.startsWith('image')) {
       throw new AppError('Only images are allowed', false, 403);
     }
-    profileImage.mv(
-      path.join(`${process.cwd()}/public/profileImages/${profileImage.name}`),
-      async (err) => {
-        if (err) throw new Error(err.message);
-      },
-    );
+    this.imageUploadService.saveImageToDirectory(profileImage);
     try {
       const profile = await this.profileRepository.createProfile(
         parseInt(id),
@@ -49,13 +43,7 @@ class ProfileService {
     if (!profile) throw new AppError('Profile not found', false, 404);
     if (profile.userId !== id)
       throw new AppError('You cannot delete profile that you don\t own');
-    unlink(
-      path.join(
-        `${process.cwd()}/public/profileImages/${
-          profile.filename.split('-')[0]
-        }`,
-      ),
-    );
+    await this.imageUploadService.deleteImageFromDirectory(profile);
     await this.profileRepository.deleteProfile(profileId);
     return profile;
   }

@@ -11,6 +11,7 @@ import ReviewRepository, {
 import ProfileRepository, {
   IProfileRepository,
 } from 'repository/profile.repository';
+import imageUploadService, { IIMageUploader } from './ImageUploader';
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
 container.registerSingleton<IBookRepository>('BookRepository', BookRepository);
@@ -26,3 +27,6 @@ container.registerSingleton<IHashService>('HashService', BcryptService);
 
 container.register<IJWTService>('JWTService', { useValue: authService });
 container.register<IMailService>('MailService', { useValue: mailService });
+container.register<IIMageUploader>('ImageUploadService', {
+  useValue: imageUploadService,
+});
