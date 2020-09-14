@@ -54,10 +54,10 @@ class UserRepository implements IUserRepository {
     return user;
   }
 
-  async create(userDto: CreateUserDTO) {
+  async create(createDto: CreateUserDTO) {
     const user = await prisma.user.create({
       data: {
-        ...userDto,
+        ...createDto,
       },
     });
     return user;

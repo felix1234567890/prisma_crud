@@ -4,28 +4,13 @@ import isAuthenticated from '../utils/isAuthenticated';
 import { celebrate, Segments, Joi } from 'celebrate';
 import roleMiddleware from 'utils/roleMiddleware';
 import { Role } from '@prisma/client';
+import asyncHandler from 'utils/asyncHandler';
+import BookController from 'controllers/book.controller';
+import { container } from 'tsyringe';
 
+const bookController = container.resolve(BookController);
 const router = Router();
-
-router.post(
-  '/',
-  isAuthenticated,
-  async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.user;
-    const book = await prisma.book.create({
-      data: {
-        author: {
-          connect: {
-            id: +id,
-          },
-        },
-        description: req.body.description,
-        title: req.body.title,
-      },
-    });
-    return res.status(200).send(book);
-  },
-);
+router.post('/', isAuthenticated, asyncHandler(bookController.createBook));
 
 router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
   const book = await prisma.book.findOne({

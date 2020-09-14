@@ -19,6 +19,7 @@ import options from './utils/swagger';
 
 class App {
   private app: Application;
+
   constructor() {
     this.app = express();
     this.setupMiddleware();
@@ -50,16 +51,16 @@ class App {
     this.app.use('/auth', authRoutes);
   }
 
-  setupPostRouteMiddleware() {
+  private setupPostRouteMiddleware() {
     const specs = swaggerJsdoc(options);
     this.app.use(
       '/api-docs',
       swaggerUi.serve,
       swaggerUi.setup(specs, { explorer: true }),
     );
-    this.app.use((req, res, next) => {
+    this.app.use(function (req, res, next) {
       const error = new AppError('Not found', false, 404);
-      throw error;
+      next(error);
     });
     this.app.use(errorHandler);
   }

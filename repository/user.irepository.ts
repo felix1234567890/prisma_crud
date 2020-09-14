@@ -5,7 +5,7 @@ import ListUsersDTO from 'dtos/user/ListUsersDTO';
 import { IBaseRepository } from './base.repository';
 
 export default interface IUserRepository
-  extends IBaseRepository<CreateUserDTO, UpdateUserDTO, User> {
+  extends IBaseRepository<CreateUserDTO, User, UpdateUserDTO> {
   getPaginatedUsers(
     userDto: ListUsersDTO,
   ): Promise<(User & { books: Book[] })[]>;

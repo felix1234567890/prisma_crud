@@ -1,8 +1,5 @@
 import { inject, injectable } from 'tsyringe';
-import CreateUserDTO from '../dtos/auth/CreateUserDTO';
 import validateClassParameters from '../utils/validateClassParameters';
-import AppError from '../utils/AppError';
-import bcrypt from 'bcrypt';
 import { plainToClass } from 'class-transformer';
 import { IBookRepository } from 'repository/book.repository';
 import { IReviewRepository } from 'repository/review.repository';
@@ -13,6 +10,7 @@ import {
   UpdateUserDTO,
   ListUsersDTO,
 } from 'dtos/user';
+import { redisClient } from '../utils/redis';
 
 @injectable()
 export default class UserService {
@@ -22,21 +20,6 @@ export default class UserService {
     @inject('ReviewRepository')
     private readonly reviewRepository: IReviewRepository,
   ) {}
-
-  public async createUser(userDto: CreateUserDTO): Promise<UserResponseDTO> {
-    await validateClassParameters(userDto);
-    const user = await this.userRepository.getUserByEmail(userDto.email);
-    if (user) {
-      throw new AppError('User exists with this same e-mail', false, 400);
-    }
-    const password = bcrypt.hashSync(userDto.password, 10);
-    const createdUser = await this.userRepository.create({
-      ...userDto,
-      password,
-    });
-    const res = plainToClass(UserResponseDTO, createdUser);
-    return res;
-  }
 
   public async deleteUser(userDto: FindDeleteUserDTO) {
     await validateClassParameters(userDto);
@@ -62,6 +45,8 @@ export default class UserService {
   public async findUser({ id }: FindDeleteUserDTO) {
     const user = await this.userRepository.findById(id);
     const res = plainToClass(UserResponseDTO, user);
+    const books = JSON.stringify(await this.findUserBooks({ id }));
+    redisClient.setex(user?.username!, 3600, books);
     return res;
   }
 

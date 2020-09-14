@@ -1,18 +1,20 @@
 import { prisma } from 'index';
 import { Profile } from '@prisma/client';
 import { UploadedFile } from 'express-fileupload';
+import { IBaseRepository } from './base.repository';
 
-export interface IProfileRepository {
-  createProfile(userId: number, profileImage: UploadedFile): Promise<Profile>;
-  getProfiles(): Promise<Profile[]>;
-  deleteProfile(id: number): Promise<Profile>;
-  findProfileById(id: number): Promise<Profile | null>;
-}
+type CreateProfileDTO = {
+  userId: number;
+  profileImage: UploadedFile;
+};
+export interface IProfileRepository
+  extends Omit<IBaseRepository<CreateProfileDTO, Profile>, 'update'> {}
+
 export default class ProfileRepository implements IProfileRepository {
-  public async createProfile(
-    userId: number,
-    profileImage: UploadedFile,
-  ): Promise<Profile> {
+  public async create({
+    profileImage,
+    userId,
+  }: CreateProfileDTO): Promise<Profile> {
     const profile = await prisma.profile.create({
       data: {
         filename: `${profileImage.name}-${profileImage.md5}`,
@@ -26,7 +28,7 @@ export default class ProfileRepository implements IProfileRepository {
     return profile;
   }
 
-  public async getProfiles() {
+  public async getAll() {
     const profiles = await prisma.profile.findMany({
       include: {
         user: true,
@@ -35,14 +37,14 @@ export default class ProfileRepository implements IProfileRepository {
     return profiles;
   }
 
-  public async deleteProfile(id: number) {
+  public async delete(id: number) {
     const profile = await prisma.profile.delete({
       where: { id },
     });
     return profile;
   }
 
-  public async findProfileById(id: number) {
+  public async findById(id: number) {
     const profile = await prisma.profile.findOne({
       where: { id },
     });

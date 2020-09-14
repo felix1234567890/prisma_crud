@@ -1,9 +1,12 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import AppError from './AppError';
-import { errors } from 'celebrate';
 
-const errorHandler = (err: Error, _: Request, res: Response) => {
-  errors();
+const errorHandler = (
+  err: Error,
+  _: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       success: false,

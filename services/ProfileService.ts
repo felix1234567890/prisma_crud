@@ -21,10 +21,10 @@ class ProfileService {
     }
     this.imageUploadService.saveImageToDirectory(profileImage);
     try {
-      const profile = await this.profileRepository.createProfile(
-        parseInt(id),
+      const profile = await this.profileRepository.create({
+        userId: parseInt(id),
         profileImage,
-      );
+      });
       return profile;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -34,17 +34,17 @@ class ProfileService {
   }
 
   public async getAllProfiles() {
-    const profiles = await this.profileRepository.getProfiles();
+    const profiles = await this.profileRepository.getAll();
     return profiles;
   }
 
   public async deleteProfile({ profileId, id }: DeleteProfileDTO) {
-    const profile = await this.profileRepository.findProfileById(profileId);
+    const profile = await this.profileRepository.findById(profileId);
     if (!profile) throw new AppError('Profile not found', false, 404);
     if (profile.userId !== id)
       throw new AppError('You cannot delete profile that you don\t own');
     await this.imageUploadService.deleteImageFromDirectory(profile);
-    await this.profileRepository.deleteProfile(profileId);
+    await this.profileRepository.delete(profileId);
     return profile;
   }
 }

@@ -2,16 +2,52 @@ import { injectable } from 'tsyringe';
 import { prisma } from 'index';
 import { Book } from '@prisma/client';
 import AppError from 'utils/AppError';
+import { IBaseRepository } from './base.repository';
+import CreateBookDTO from 'dtos/book/CreateBookDTO';
 
-export interface IBookRepository {
+export interface IBookRepository extends IBaseRepository<CreateBookDTO, Book> {
   findUserBooks(id: number): Promise<Book[]>;
-  // createBook(): Promise<Book>;
-  // updateBook(): Promise<Book>;
-  // getAllBooks(): Promise<(Book & { author: User })[]>;
 }
 
 @injectable()
-class BookRepository {
+class BookRepository implements IBookRepository {
+  public async create({
+    id,
+    description,
+    title,
+    yearPublished,
+  }: CreateBookDTO): Promise<Book> {
+    const book = await prisma.book.create({
+      data: {
+        author: {
+          connect: {
+            id,
+          },
+        },
+        description,
+        title,
+        yearPublished,
+      },
+    });
+    return book;
+  }
+
+  delete(id: number): Promise<Book> {
+    throw new Error('Method not implemented.');
+  }
+
+  update(updateDto: null): Promise<Book> {
+    throw new Error('Method not implemented.');
+  }
+
+  findById(id: number): Promise<Book | null> {
+    throw new Error('Method not implemented.');
+  }
+
+  getAll(): Promise<Book[]> {
+    throw new Error('Method not implemented.');
+  }
+
   public async findUserBooks(id: number) {
     const author = await prisma.user.findOne({
       where: { id },

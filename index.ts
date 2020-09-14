@@ -5,6 +5,7 @@ async function main() {
   const app = new App();
   app.getServer().listen(3000);
 }
+
 export const prisma = new PrismaClient({
   errorFormat: 'pretty',
   log: [
