@@ -3,9 +3,10 @@ import { prisma } from 'index';
 import { Book } from '@prisma/client';
 import AppError from 'utils/AppError';
 import { IBaseRepository } from './base.repository';
-import CreateBookDTO from 'dtos/book/CreateBookDTO';
+import { UpdateBookDTO, CreateBookDTO } from 'dtos/book';
 
-export interface IBookRepository extends IBaseRepository<CreateBookDTO, Book> {
+export interface IBookRepository
+  extends IBaseRepository<CreateBookDTO, Book, UpdateBookDTO> {
   findUserBooks(id: number): Promise<Book[]>;
 }
 
@@ -32,20 +33,43 @@ class BookRepository implements IBookRepository {
     return book;
   }
 
-  delete(id: number): Promise<Book> {
-    throw new Error('Method not implemented.');
+  public async update({
+    bookId,
+    description,
+    title,
+    yearPublished,
+  }: UpdateBookDTO): Promise<Book> {
+    const book = await prisma.book.update({
+      where: {
+        id: bookId,
+      },
+      data: {
+        description,
+        title,
+        yearPublished,
+      },
+      include: {
+        author: true,
+      },
+    });
+    return book;
   }
 
-  update(updateDto: null): Promise<Book> {
-    throw new Error('Method not implemented.');
+  public async findById(id: number): Promise<Book | null> {
+    const book = await prisma.book.findOne({
+      where: { id },
+      include: { author: true },
+    });
+    return book;
   }
 
-  findById(id: number): Promise<Book | null> {
-    throw new Error('Method not implemented.');
-  }
-
-  getAll(): Promise<Book[]> {
-    throw new Error('Method not implemented.');
+  public async getAll(): Promise<Book[]> {
+    const books = await prisma.book.findMany({
+      include: {
+        author: true,
+      },
+    });
+    return books;
   }
 
   public async findUserBooks(id: number) {
@@ -62,54 +86,11 @@ class BookRepository implements IBookRepository {
     return books;
   }
 
-  //   public async createBook() {
-  //     const book = await prisma.book.create({
-  //       data: {
-  //         author: {
-  //           connect: {
-  //             id: +id,
-  //           },
-  //         },
-  //         description: req.body.description,
-  //         title: req.body.title,
-  //       },
-  //     });
-  //     return book;
-  //   }
-
-  //   public async updateBook() {
-  //     const book = prisma.book.update({
-  //       where: {
-  //         id: +req.params.id,
-  //       },
-  //       data: {
-  //         description: req.body.description,
-  //         title: req.body.title,
-  //         yearPublished: req.body.yearPublished,
-  //       },
-  //       include: {
-  //         author: true,
-  //       },
-  //     });
-  //     return book;
-  //   }
-
-  //   public async getAllBooks() {
-  //     const books = await prisma.book.findMany({
-  //       include: {
-  //         author: true,
-  //       },
-  //     });
-  //     return books;
-  //   }
-
-  //   public async findBookById() {
-  //     const book = await prisma.book.findOne({
-  //       where: { id: +req.params.id },
-  //       include: { author: true },
-  //     });
-  //     return book;
-  //   }
-  // }
+  public async delete(id: number): Promise<Book> {
+    const book = await prisma.book.delete({
+      where: { id },
+    });
+    return book;
+  }
 }
 export default BookRepository;

@@ -1,0 +1,39 @@
+import {
+  IsString,
+  IsDefined,
+  IsOptional,
+  IsInt,
+  MinLength,
+  MaxLength,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
+
+export default class UpdateBooDTO {
+  @IsDefined()
+  @IsInt()
+  @Transform((value) => parseInt(value, 10), { toClassOnly: true })
+  id: number;
+
+  @IsDefined()
+  @IsInt()
+  @Transform((value) => parseInt(value, 10), { toClassOnly: true })
+  bookId: number;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(3, {
+    message: 'Title is too short',
+  })
+  @MaxLength(50, {
+    message: 'Title is too long',
+  })
+  public title?: string;
+
+  @IsOptional()
+  @IsString()
+  public description?: string;
+
+  @IsOptional()
+  @IsInt()
+  public yearPublished?: number;
+}

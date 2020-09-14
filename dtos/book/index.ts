@@ -1,2 +1,5 @@
 import CreateBookDTO from './CreateBookDTO';
-export { CreateBookDTO };
+import UpdateBookDTO from './UpdateBookDTO';
+import GetDeleteBookDTO from './GetDeleteBookDTO';
+
+export { CreateBookDTO, UpdateBookDTO, GetDeleteBookDTO };

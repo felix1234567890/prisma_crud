@@ -1,11 +1,11 @@
-import { IsDefined, IsInt } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { IsDefined, IsInt } from 'class-validator';
 
-export default class DeleteProfileDTO {
+export default class GetDeleteBookDTO {
   @IsDefined()
   @IsInt()
   @Transform((value) => parseInt(value, 10))
-  profileId: number;
+  bookId: number;
 
   @IsDefined()
   @IsInt()
