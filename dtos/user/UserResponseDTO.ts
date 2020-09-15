@@ -8,7 +8,7 @@ export default class UserResponseDTO {
 
   email: string;
 
-  married: string | null;
+  married: boolean | null;
 
   @Exclude()
   password: string;

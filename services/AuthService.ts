@@ -1,16 +1,20 @@
 import { injectable, inject } from 'tsyringe';
-import IUserRepository from 'repository/user.irepository';
-import CreateUserDTO from 'dtos/auth/CreateUserDTO';
-import UserResponseDTO from 'dtos/user/UserResponseDTO';
-import validateClassParameters from 'utils/validateClassParameters';
-import AppError from 'utils/AppError';
-import { IHashService } from 'utils/BcryptService';
+import IUserRepository from '../repository/user.irepository';
+import CreateUserDTO from '../dtos/auth/CreateUserDTO';
+import UserResponseDTO from '../dtos/user/UserResponseDTO';
+import validateClassParameters from '../utils/validateClassParameters';
+import AppError from '../utils/AppError';
+import { IHashService } from '../utils/BcryptService';
 import { plainToClass } from 'class-transformer';
-import { LoginUserDTO, ForgotPasswordDTO, ResetPasswordDTO } from 'dtos/auth';
-import { IJWTService } from 'utils/JwtAuthService';
-import UpdateUserDTO from 'dtos/user/UpdateUserDTO';
+import {
+  LoginUserDTO,
+  ForgotPasswordDTO,
+  ResetPasswordDTO,
+} from '../dtos/auth';
+import { IJWTService } from '../utils/JwtAuthService';
+import UpdateUserDTO from '../dtos/user/UpdateUserDTO';
 import crypto from 'crypto';
-import { IMailService } from 'utils/MailService';
+import { IMailService } from '../utils/MailService';
 
 interface LoginResponse {
   token: string;
