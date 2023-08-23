@@ -2,7 +2,7 @@ import { IProfileRepository } from 'repository/profile.repository';
 import { inject, injectable } from 'tsyringe';
 import { UploadedFile } from 'express-fileupload';
 import AppError from 'utils/AppError';
-import { PrismaClientKnownRequestError } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { DeleteProfileDTO } from 'dtos/profile';
 import { IIMageUploader } from 'utils/ImageUploader';
 
@@ -27,7 +27,7 @@ class ProfileService {
       });
       return profile;
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new AppError('You already have profile');
       }
     }

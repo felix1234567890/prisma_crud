@@ -56,7 +56,7 @@ class BookRepository implements IBookRepository {
   }
 
   public async findById(id: number): Promise<Book | null> {
-    const book = await prisma.book.findOne({
+    const book = await prisma.book.findUnique({
       where: { id },
       include: { author: true },
     });
@@ -73,7 +73,7 @@ class BookRepository implements IBookRepository {
   }
 
   public async findUserBooks(id: number) {
-    const author = await prisma.user.findOne({
+    const author = await prisma.user.findUnique({
       where: { id },
     });
     if (!author)

@@ -5,7 +5,7 @@ import UserResponseDTO from '../dtos/user/UserResponseDTO';
 import validateClassParameters from '../utils/validateClassParameters';
 import AppError from '../utils/AppError';
 import { IHashService } from '../utils/BcryptService';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import {
   LoginUserDTO,
   ForgotPasswordDTO,
@@ -45,7 +45,7 @@ class AuthService implements IAuthService {
       ...userDto,
       password,
     });
-    const res = plainToClass(UserResponseDTO, createdUser);
+    const res = plainToInstance(UserResponseDTO, createdUser);
     return res;
   }
 
@@ -56,7 +56,7 @@ class AuthService implements IAuthService {
       throw new AppError('User with this email doesn\t exist', false, 404);
     }
     if (!process.env.JWT_SECRET) throw new AppError('Env variable not loaded');
-    const isMatch = this.hashService.compareHash(
+    const isMatch = await this.hashService.compareHash(
       userDto.password,
       user.password,
     );
@@ -80,7 +80,7 @@ class AuthService implements IAuthService {
     if (user) {
       user.resetPasswordToken = hashToken;
       user.resetPasswordExpire = expirationTime;
-      const userDto = plainToClass(UpdateUserDTO, user);
+      const userDto = plainToInstance(UpdateUserDTO, user);
       const userData = await this.userRepository.update(userDto);
       const host = process.env.HOST || `http://localhost:3000`;
       await this.mailService.sendMail({
@@ -109,7 +109,7 @@ class AuthService implements IAuthService {
       user.password = this.hashService.generateHash(resetPasswordDTO.password);
       user.resetPasswordToken = null;
       user.resetPasswordExpire = null;
-      const userDto = plainToClass(UpdateUserDTO, user);
+      const userDto = plainToInstance(UpdateUserDTO, user);
       await this.userRepository.update(userDto);
     } else {
       throw new AppError('No user found');

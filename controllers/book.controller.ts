@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
 import { Request, Response } from 'express';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { CreateBookDTO, GetDeleteBookDTO } from 'dtos/book';
 import BookService from 'services/BookService';
 import UpdateBooDTO from 'dtos/book/UpdateBookDTO';
@@ -10,7 +10,7 @@ class BookController {
   constructor(private readonly bookService: BookService) {}
 
   public createBook = async (req: Request, res: Response) => {
-    const createBookDto = plainToClass(CreateBookDTO, {
+    const createBookDto = plainToInstance(CreateBookDTO, {
       ...req.body,
       ...req.user,
     });
@@ -19,7 +19,7 @@ class BookController {
   };
 
   public updateBook = async (req: Request, res: Response) => {
-    const updateBookDto = plainToClass(UpdateBooDTO, {
+    const updateBookDto = plainToInstance(UpdateBooDTO, {
       ...req.body,
       ...req.user,
       ...req.params,
@@ -34,7 +34,7 @@ class BookController {
   };
 
   public deleteBook = async (req: Request, res: Response) => {
-    const bookDto = plainToClass(GetDeleteBookDTO, {
+    const bookDto = plainToInstance(GetDeleteBookDTO, {
       ...req.params,
       ...req.user,
     });
@@ -43,7 +43,7 @@ class BookController {
   };
 
   public getBook = async (req: Request, res: Response) => {
-    const bookDto = plainToClass(GetDeleteBookDTO, {
+    const bookDto = plainToInstance(GetDeleteBookDTO, {
       ...req.params,
       ...req.user,
     });

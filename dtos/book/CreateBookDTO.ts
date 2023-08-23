@@ -11,7 +11,7 @@ import { Transform } from 'class-transformer';
 export default class CreateBookDTO {
   @IsDefined()
   @IsInt()
-  @Transform((value) => parseInt(value, 10), { toClassOnly: true })
+  @Transform(({value}) => parseInt(value, 10), { toClassOnly: true })
   id: number;
 
   @IsDefined()

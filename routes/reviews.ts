@@ -10,7 +10,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const { bookId, text } = req.body;
     const { id } = req.user;
-    const book = await prisma.book.findOne({
+    const book = await prisma.book.findUnique({
       where: { id: +bookId },
     });
     if (!book) return res.status(404).json({ error: 'Not found' });
@@ -37,7 +37,7 @@ router.post(
 );
 
 router.put('/', async (req: Request, res: Response, next: NextFunction) => {
-  const book = await prisma.book.findOne({
+  const book = await prisma.book.findUnique({
     where: { id: +req.params.id },
     include: { author: true },
   });
@@ -68,7 +68,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 router.get('/:id', isAuthenticated, async (req: Request, res: Response) => {
-  const review = await prisma.review.findOne({
+  const review = await prisma.review.findUnique({
     where: {
       userId_bookId: {
         bookId: +req.params.id,

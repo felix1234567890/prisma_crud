@@ -45,7 +45,7 @@ export default class ProfileRepository implements IProfileRepository {
   }
 
   public async findById(id: number) {
-    const profile = await prisma.profile.findOne({
+    const profile = await prisma.profile.findUnique({
       where: { id },
     });
     return profile;

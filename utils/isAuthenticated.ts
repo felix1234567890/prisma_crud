@@ -21,7 +21,8 @@ const isAuthenticated = (
     request.user = { id };
     return next();
   } catch (error) {
-    throw new Error(error.message);
+
+    throw new Error((error as Error).message);
   }
 };
 export default isAuthenticated;

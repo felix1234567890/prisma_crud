@@ -28,7 +28,10 @@ class MailService implements IMailService {
     try {
       await this.transporter.sendMail(data);
     } catch (error) {
-      throw new AppError(error.message);
+      if (error instanceof Error) {
+        throw new AppError(error?.message);
+      }
+      throw error;
     }
   }
 }

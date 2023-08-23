@@ -11,46 +11,55 @@ generator client {
 }
 
 model User {
-  id Int @default(autoincrement()) @id
-  username String @unique
-  email String @unique
-  password String
-  married Boolean?
-  role Role @default(USER)
-  createdAt DateTime @default(now())
-  books Book[]
-  reviews Review[]
-  resetPasswordToken String? @unique
+  id                  Int       @id @default(autoincrement())
+  username            String    @unique
+  email               String    @unique
+  password            String
+  married             Boolean?
+  role                Role      @default(USER)
+  createdAt           DateTime  @default(now())
+  books               Book[]
+  reviews             Review[]
+  resetPasswordToken  String?   @unique
   resetPasswordExpire DateTime?
-  @@map(name:"users")
+  Profile             Profile[]
+
+  @@map(name: "users")
 }
+
 model Book {
-  id Int @default(autoincrement()) @id
-  title String 
-  authorId Int
-  author User @relation(fields: [authorId],references: [id])
-  description String
+  id            Int      @id @default(autoincrement())
+  title         String
+  authorId      Int
+  author        User     @relation(fields: [authorId], references: [id])
+  description   String
   yearPublished Int?
-  reviews Review[]
-  @@map(name:"books")
+  reviews       Review[]
+
+  @@map(name: "books")
 }
+
 model Profile {
-  id Int @default(autoincrement()) @id
+  id       Int    @id @default(autoincrement())
   filename String
-  userId Int
-  user User @relation(fields: [userId], references:[id])
-  @@map(name:"profiles")
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@map(name: "profiles")
 }
+
 model Review {
-  @@id([userId, bookId])
-  text String
+  text   String
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   bookId Int
-  book Book @relation(fields: [bookId], references: [id])
-  @@map(name:"reviews")
+  book   Book   @relation(fields: [bookId], references: [id])
+
+  @@id([userId, bookId])
+  @@map(name: "reviews")
 }
+
 enum Role {
-  USER 
+  USER
   ADMIN
 }

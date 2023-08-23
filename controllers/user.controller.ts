@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { injectable } from 'tsyringe';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import {
   FindDeleteUserDTO,
   UpdateUserDTO,
@@ -17,7 +17,7 @@ class UserController {
     req: Request,
     res: Response,
   ): Promise<Response<UserResponseDTO[]>> => {
-    const userDto = plainToClass(FindDeleteUserDTO, req.params);
+    const userDto = plainToInstance(FindDeleteUserDTO, req.params);
     const user = await this.userService.deleteUser(userDto);
     return res.status(200).send(user);
   };
@@ -26,31 +26,31 @@ class UserController {
     req: Request,
     res: Response,
   ): Promise<Response<UserResponseDTO>> => {
-    const userDto = plainToClass(UpdateUserDTO, { ...req.params, ...req.body });
+    const userDto = plainToInstance(UpdateUserDTO, { ...req.params, ...req.body });
     const user = await this.userService.updateUser(userDto);
     return res.status(200).send(user);
   };
 
   public findUser = async (req: Request, res: Response) => {
-    const userDto = plainToClass(FindDeleteUserDTO, req.params);
+    const userDto = plainToInstance(FindDeleteUserDTO, req.params);
     const user = await this.userService.findUser(userDto);
     res.status(200).send(user);
   };
 
   public paginateUsers = async (req: Request, res: Response) => {
-    const userDto = plainToClass(ListUsersDTO, req.query);
+    const userDto = plainToInstance(ListUsersDTO, req.query);
     const user = await this.userService.paginateUsers(userDto);
     res.status(200).send(user);
   };
 
   public getUserBooks = async (req: Request, res: Response) => {
-    const userDto = plainToClass(FindDeleteUserDTO, req.params);
+    const userDto = plainToInstance(FindDeleteUserDTO, req.params);
     const books = await this.userService.findUserBooks(userDto);
     res.status(200).send(books);
   };
 
   public getUserReviews = async (req: Request, res: Response) => {
-    const userDto = plainToClass(FindDeleteUserDTO, req.params);
+    const userDto = plainToInstance(FindDeleteUserDTO, req.params);
     const reviews = await this.userService.findUserReviews(userDto);
     res.status(200).send(reviews);
   };

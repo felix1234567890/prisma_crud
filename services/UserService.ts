@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 import validateClassParameters from '../utils/validateClassParameters';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { IBookRepository } from 'repository/book.repository';
 import { IReviewRepository } from 'repository/review.repository';
 import IUserRepository from 'repository/user.irepository';
@@ -24,29 +24,29 @@ export default class UserService {
   public async deleteUser(userDto: FindDeleteUserDTO) {
     await validateClassParameters(userDto);
     const user = await this.userRepository.delete(userDto.id);
-    const res = plainToClass(UserResponseDTO, user);
+    const res = plainToInstance(UserResponseDTO, user);
     return res;
   }
 
   public async updateUser(userDto: UpdateUserDTO) {
     await validateClassParameters(userDto);
     const user = await this.userRepository.update(userDto);
-    const res = plainToClass(UserResponseDTO, user);
+    const res = plainToInstance(UserResponseDTO, user);
     return res;
   }
 
   public async paginateUsers(userDto: ListUsersDTO) {
     await validateClassParameters(userDto);
     const users = await this.userRepository.getPaginatedUsers(userDto);
-    const res = plainToClass(UserResponseDTO, users);
+    const res = plainToInstance(UserResponseDTO, users);
     return res;
   }
 
   public async findUser({ id }: FindDeleteUserDTO) {
     const user = await this.userRepository.findById(id);
-    const res = plainToClass(UserResponseDTO, user);
+    const res = plainToInstance(UserResponseDTO, user);
     const books = JSON.stringify(await this.findUserBooks({ id }));
-    redisClient.setex(user?.username!, 3600, books);
+    redisClient.setEx(user?.username!, 3600, books);
     return res;
   }
 

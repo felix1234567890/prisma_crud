@@ -1,7 +1,5 @@
 import { Router } from 'express';
-
 import { container } from 'tsyringe';
-
 import asyncHandler from 'utils/asyncHandler';
 import AuthController from 'controllers/auth.controller';
 

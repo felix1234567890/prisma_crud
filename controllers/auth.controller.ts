@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
 import { Request, Response, NextFunction } from 'express';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import AuthService from 'services/AuthService';
 import {
   CreateUserDTO,
@@ -14,13 +14,13 @@ class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   public registerUser = async (req: Request, res: Response) => {
-    const userDto = plainToClass(CreateUserDTO, req.body);
+    const userDto = plainToInstance(CreateUserDTO, req.body);
     const user = await this.authService.registerUser(userDto);
     res.status(201).send(user);
   };
 
   public loginUser = async (req: Request, res: Response) => {
-    const userDto = plainToClass(LoginUserDTO, req.body);
+    const userDto = plainToInstance(LoginUserDTO, req.body);
     const token = await this.authService.loginUser(userDto);
     res.status(200).send(token);
   };
@@ -30,7 +30,7 @@ class AuthController {
     res: Response,
     next: NextFunction,
   ) => {
-    const userDto = plainToClass(ForgotPasswordDTO, req.body);
+    const userDto = plainToInstance(ForgotPasswordDTO, req.body);
     try {
       await this.authService.forgotPassword(userDto);
       return res.status(201).json({
@@ -48,7 +48,7 @@ class AuthController {
     res: Response,
     next: NextFunction,
   ) => {
-    const resetPasswordDTO = plainToClass(ResetPasswordDTO, {
+    const resetPasswordDTO = plainToInstance(ResetPasswordDTO, {
       ...req.body,
       ...req.params,
     });

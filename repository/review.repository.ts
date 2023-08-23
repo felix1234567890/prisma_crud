@@ -1,20 +1,32 @@
 import { injectable } from 'tsyringe';
 import { prisma } from 'index';
-import { Review } from '@prisma/client';
+import { Book, Review, User } from '@prisma/client';
 import AppError from 'utils/AppError';
 
 export interface IReviewRepository {
   findUserReviews(id: number): Promise<Review[]>;
-  // createReview(): Promise<Review>;
-  // // updateReview(): Promise<Review>;
-  // getReviews(): Promise<Review[]>;
-  // getReviewById(): Promise<{ user: User; book: Book; text: string } | null>;
+  createReview(): Promise<Review>;
+  updateReview(): Promise<Review>;
+  getReviews(): Promise<Review[]>;
+  getReviewById(): Promise<{ user: User; book: Book; text: string } | null>;
 }
 
 @injectable()
-class ReviewRepository {
+class ReviewRepository implements IReviewRepository {
+  createReview(): Promise<Review> {
+    throw new Error('Method not implemented.');
+  }
+  updateReview(): Promise<Review> {
+    throw new Error('Method not implemented.');
+  }
+  getReviews(): Promise<Review[]> {
+    throw new Error('Method not implemented.');
+  }
+  getReviewById(): Promise<{ user: User; book: Book; text: string; } | null> {
+    throw new Error('Method not implemented.');
+  }
   async findUserReviews(id: number) {
-    const user = await prisma.user.findOne({
+    const user = await prisma.user.findUnique({
       where: { id },
     });
     if (!user)
@@ -69,7 +81,7 @@ class ReviewRepository {
   //   return reviews;
   // }
   // public async getReviewById() {
-  //   const review = await prisma.review.findOne({
+  //   const review = await prisma.review.findUnique({
   //     where: {
   //       userId_bookId: {
   //         bookId: +req.params.id,

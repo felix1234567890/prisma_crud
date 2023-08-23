@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import AppError from 'utils/AppError';
 import { UploadedFile } from 'express-fileupload';
 import { DeleteProfileDTO } from 'dtos/profile';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 @injectable()
 class ProfileController {
@@ -29,7 +29,7 @@ class ProfileController {
   };
 
   public deleteProfile = async (req: Request, res: Response) => {
-    const profileDto = plainToClass(DeleteProfileDTO, {
+    const profileDto = plainToInstance(DeleteProfileDTO, {
       ...req.params,
       ...req.user,
     });

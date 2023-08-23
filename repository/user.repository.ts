@@ -8,21 +8,21 @@ import { CreateUserDTO } from 'dtos/auth';
 @injectable()
 class UserRepository implements IUserRepository {
   async findByResetPasswordToken(token: string): Promise<User | null> {
-    const user = await prisma.user.findOne({
+    const user = await prisma.user.findUnique({
       where: { resetPasswordToken: token },
     });
     return user;
   }
 
   async findById(id: number): Promise<User | null> {
-    const user = await prisma.user.findOne({
+    const user = await prisma.user.findUnique({
       where: { id },
     });
     return user;
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
-    const user = await prisma.user.findOne({
+    const user = await prisma.user.findUnique({
       where: { email },
     });
     return user;
@@ -46,7 +46,7 @@ class UserRepository implements IUserRepository {
   }
 
   async getUserByEmail(email: string) {
-    const user = await prisma.user.findOne({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
